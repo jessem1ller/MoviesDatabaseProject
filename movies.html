@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Library</title>
+    <link rel="stylesheet" href="styles.css" />
+    <script src="https://kit.fontawesome.com/4a9be1fcb9.js" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0&icon_names=search" />
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Lexend:wght@100..900&family=Roboto:ital,wght@0,100..900;1,100..900&display=swap');
+    </style>
+    <script src="index.js"></script>
+    <script src="movies.js"></script>
+  </head>
+
+  <body id="movies__body">
+    <section>
+      <nav>
+        <div class="nav__container">
+          <img class="logo" src="assets/Library.svg" alt="" />
+          <ul class="nav__links">
+            <li><a href="#" class="nav__link">Home</a></li>
+            <li><a href="#" class="nav__link">Contact</a></li>
+            <li><a href="#" class="nav__link nav__link--primary">Movies</a></li>
+          </ul>
+          <button class="btn__menu" onclick="openMenu()">
+            <i class="fas fa-bars"></i>
+          </button>
+          <div class="menu__backdrop" style="visibility: hidden">
+            <button class="btn__menu btn__menu--close" onclick="closeMenu()">
+              <i class="fas fa-times"></i>
+            </button>
+            <ul class="menu__links">
+              <li class="menu__list">
+                <a href="#" class="menu__link" onclick="closeMenu()">Home</a>
+              </li>
+              <li class="menu__list">
+                <a href="#features" class="menu__link" onclick="closeMenu()"
+                  >Movies</a
+                >
+              </li>
+              <li class="menu__list">
+                <a class="menu__link no-cursor" onclick="closeMenu()"
+                  >Contacts</a
+                >
+              </li>
+            </ul>
+          </div>
+        </div>
+      </nav>
+    </section>
+
+    <section>
+      <div class="search__container">
+        <div class="search">
+          <span id="mySearch" class="search__icon material-symbols-outlined">search</span>
+          <input onchange="onSearchChange(event)" class="search__input" type="search" placeholder="Search Movie Titles">
+        </div>
+      </div>
+    </section>
+
+    <main id="movies__main">
+      <section>
+        <div class="container">
+          <div class="row">
+            <div class="movies__header">
+              <h2 class="section__title movies__header--title">
+                All <span class="purple">Movies</span>
+              </h2>
+              <select id="filter" onchange="filterMovies(event)">
+                <option value="" disabled selected>Sort</option>
+                <option value="OLD_TO_NEW">Year, Oldest to Newest</option>
+                <option value="NEW_TO_OLD">Year, Newest to Oldest</option>
+              </select>
+              </div>
+              <div class="movies">
+                <i class="fas fa-spinner movies__loading--spinner"></i>
+              </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      <div class="container">
+        <div class="row row__column">
+          <a href="#">
+            <figure class="footer__logo">
+              <img src="assets/Library.svg" class="footer__logo--img" alt="" />
+            </figure>
+          </a>
+          <div class="footer__list">
+            <a href="#" class="footer__link">Home</a>
+            <a class="footer__link no-cursor">About</a>
+            <a href="#features" class="footer__link">Movies</a>
+            <a class="footer__link no-cursor">Contact</a>
+          </div>
+          <div class="footer__copyright">Copyright &copy; 2025 Movies Database</div>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

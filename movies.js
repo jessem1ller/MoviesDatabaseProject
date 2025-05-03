@@ -1,73 +1,50 @@
-let movies;
-
 const moviesListEl = document.querySelector(".movies");
-const id = localStorage.getItem("id");
 
-function onSearchChange(event) { 
-   renderMovies(event.target.value);
+function onSearchChange(event) {
+    const searchTerm = event.target.value;
+    const filter = filterMovies();
+    renderMovies(searchTerm, filter);
 }
 
-async function renderMovies(searchTerm) {
-  const movies = await fetch(
-    `https://www.omdbapi.com/?s=${searchTerm}&apikey=94c6a856`
-  );
-  const moviesData = await movies.json();
-  console.log(moviesData);
-  moviesListEl.innerHTML = moviesData.Search.map((moviesData) =>
-    movieHTML(moviesData)
-  ).join('');
+function displayMovies(movies) {
+    moviesListEl.innerHTML = movies.map(movie => movieHTML(movie)).join('');
 }
 
+async function renderMovies(searchTerm, filter) {
+    const response = await fetch(`https://www.omdbapi.com/?s=${searchTerm}&apikey=94c6a856`);
+    const moviesData = await response.json();
+    let movies = moviesData.Search || [];
 
-renderMovies(id);
-
-async function renderMovieData(filter) {
-  // const moviesWrapper = document.querySelector(".movies");
-console.log(moviesData)
-  moviesListEl.classList += ' movies__loading'
-
-  if (!moviesData) {
-    moviesData = await renderMovies();
-    console.log(moviesData)
-  }
-  
-  moviesListEl.classList.remove('movies__loading')
-
-  if (filter === "OLD_TO_NEW") {
-    movies.sort(
-      (a, b) =>
-        (a.Year) - (b.Year)
-    );
+    if (filter === "OLD_TO_NEW") {
+      movies.sort((a, b) => a.Year - b.Year);
   } else if (filter === "NEW_TO_OLD") {
-    movies.sort(
-      (a, b) =>
-        (b.Year) - (a.Year)
-    );
+      movies.sort((a, b) => b.Year - a.Year);
   }
 
-  const movieHTML = movies
-    .map((movie) => {
-      return `<div class="movie">
-    <figure class="movie__img--wrapper">
-      <img class="movie__img" src="${movie.Poster}" alt="">
-    </figure>
-    <div class="movie__title">
-      ${movie.Title}
-    </div>
-    <div class="movie__price">
-      ${movie.Year}
-    </div>
-  </div>`;
-    })
-    .join("");
+    displayMovies(movies);
+    moviesListEl.classList.remove('movies__loading');
+}
 
-  moviesListEl.innerHTML = movieHTML;
+function movieHTML(movie) {
+    return `
+        <div class="movie">
+            <figure class="movie__img--wrapper">
+                <img class="movie__img" src="${movie.Poster}" alt="">
+            </figure>
+            <div class="movie__title">${movie.Title}</div>
+            <div class="movie__price">${movie.Year}</div>
+        </div>`;
 }
 
 function filterMovies(event) {
-  renderMovieData(event.target.value);
+    const selectElement = document.querySelector("#filter");
+    return selectElement.value;
 }
 
-setTimeout(() => {
-  renderMovieData();
-});
+function openMenu() {
+  document.body.classList += " menu--open"
+}
+
+function closeMenu() {
+  document.body.classList.remove('menu--open')
+}

@@ -5,32 +5,44 @@ function onSearchChange(event) {
     renderMovies(searchTerm);
 }
 
-function filterMovies(event) {
-    const selectElement = document.querySelector("#filter");
-    console.log(selectElement.value);
-    return selectElement.value;
+const filterSelectEl = document.querySelector("#filter");
+filterSelectEl.addEventListener("change", () => {
+    const searchTerm = document.querySelector(".search__input").value;
+    renderMovies(searchTerm);
+});
+
+async function renderMovies(searchTerm) {
+    moviesListEl.classList += ' movies__loading';
+    const response = await fetch(`https://www.omdbapi.com/?s=${searchTerm}&apikey=94c6a856`);
+    const moviesData = await response.json();
+    let movies = moviesData.Search || [];
+
+    setTimeout(() => {
+        moviesListEl.classList.remove('movies__loading');
+        displayMovies(movies);
+        setupFilters(movies);
+    }, 1000);
 }
 
 function displayMovies(movies) {
     moviesListEl.innerHTML = movies.map(movie => movieHTML(movie)).join('');
 }
 
-async function renderMovies(searchTerm) {
-    const filter = filterMovies();
-    const response = await fetch(`https://www.omdbapi.com/?s=${searchTerm}&apikey=94c6a856`);
-    const moviesData = await response.json();
-    let movies = moviesData.Search || []; 
+function filterMovies() {
+    const selectElement = document.querySelector("#filter");
+    return selectElement.value;
+}
 
-    setTimeout(() => {
-        if (filter === "OLD_TO_NEW") {
-            movies.sort((a, b) => Number(a.Year) - Number(b.Year));
-        } else if (filter === "NEW_TO_OLD") {
-            movies.sort((a, b) => Number(b.Year) - Number(a.Year));
-        }
-        
-        displayMovies(movies);
-        moviesListEl.classList.remove('movies__loading');
-    }, 1000);
+function setupFilters(movies) {
+    const filter = filterMovies();
+
+    if (filter === "OLD_TO_NEW") {
+        movies.sort((a, b) => Number(a.Year) - Number(b.Year));
+    } else if (filter === "NEW_TO_OLD") {
+        movies.sort((a, b) => Number(b.Year) - Number(a.Year));
+    }
+
+    displayMovies(movies);
 }
 
 function movieHTML(movie) {
@@ -45,9 +57,9 @@ function movieHTML(movie) {
 }
 
 function openMenu() {
-  document.body.classList += " menu--open"
+    document.body.classList += " menu--open";
 }
 
 function closeMenu() {
-  document.body.classList.remove('menu--open')
+    document.body.classList.remove('menu--open');
 }
